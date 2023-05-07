@@ -9,5 +9,10 @@ export class AppService {
 
   readonly baseUrl = environment.apiUrl;
 
-  constructor() { }
+  constructor(private http : HttpClient) { }
+
+  GetScrappResult() {
+    return this.http.get<any>(this.baseUrl + '/GetScrappResult');
+  }
 }
+
