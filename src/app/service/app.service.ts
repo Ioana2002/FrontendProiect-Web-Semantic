@@ -6,13 +6,14 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AppService {
+  
 
   readonly baseUrl = environment.apiUrl;
 
   constructor(private http : HttpClient) { }
 
   GetScrappResult() {
-    return this.http.get<any>(this.baseUrl + '/GetScrappResult');
+    return this.http.get<any>(this.baseUrl + '/Project/GetScrappResult');
   }
 }
 
