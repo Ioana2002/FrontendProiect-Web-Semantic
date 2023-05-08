@@ -1,6 +1,7 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppService } from 'src/app/service/app.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -9,26 +10,27 @@ import { AppService } from 'src/app/service/app.service';
   styleUrls: ['./general.component.css']
 })
 
-export class GeneralComponent implements OnInit{
-  
-  movies: {
-    name: string;
-    year: string;
-  }| any = {
-    name : ''
-  };
+export class GeneralComponent implements OnInit {
 
-  constructor(private service: AppService, private http: HttpClient) {}
+  movies: any = []
+  dataSource = new MatTableDataSource();
+  displayedColumns: string[] = ['name', 'year'];
+
+  constructor(private service: AppService, private http: HttpClient) { }
 
 
-  ngOnInit(): void {
-    this.service.GetScrappResult().subscribe((response:any) => {
-      this.movies = response;
+  ngOnInit(): void { }
 
-      console.log(this.movies)
-    }, (err) => {
-      console.log(err);
+  ShowScrapped() {
+    this.service.GetScrappResult().subscribe({
+      next: (response: any) => {
+        console.log(response)
+        for (var i = 0; i < 3; i++) {
+          this.dataSource.data.push(response[i]);
+          this.dataSource._updateChangeSubscription();
+        }
+      }
     })
   }
-  
+
 }

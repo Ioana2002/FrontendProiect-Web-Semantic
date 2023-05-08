@@ -1,7 +1,11 @@
 .container {
-    height: 200px;
-    position: relative;
-    border: 3px solid green;
+  border: 3px solid #424242;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  border-radius: 15px 15px 0px 0px;
   }
 
 .button1{
@@ -12,4 +16,8 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     padding: 10px;
+}
+
+table, th, td {
+  border:1px solid black;
 }
