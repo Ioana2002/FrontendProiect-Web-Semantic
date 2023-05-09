@@ -2,6 +2,7 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppService } from 'src/app/service/app.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -16,10 +17,19 @@ export class GeneralComponent implements OnInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'year'];
 
-  constructor(private service: AppService, private http: HttpClient) { }
+  scraped: boolean = false;
+
+  formRDF: FormGroup;
+
+  constructor(private service: AppService, private http: HttpClient, private fb: FormBuilder) { }
 
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.formRDF = this.fb.group({
+      name: [''],
+      year: [''],
+    });
+   }
 
   ShowScrapped() {
     this.service.GetScrappResult().subscribe({
@@ -28,6 +38,7 @@ export class GeneralComponent implements OnInit {
         for (var i = 0; i < 3; i++) {
           this.dataSource.data.push(response[i]);
           this.dataSource._updateChangeSubscription();
+          this.scraped = true;
         }
       }
     })
