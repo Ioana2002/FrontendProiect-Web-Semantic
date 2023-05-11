@@ -15,5 +15,12 @@ export class AppService {
   GetScrappResult() {
     return this.http.get<any>(this.baseUrl + '/Project/GetScrappResult');
   }
+
+  UploadMovie(formData: any) {
+    return this.http.post(
+      this.baseUrl + '/Project/UploadMovie',
+      formData
+    );
+  }
 }
 

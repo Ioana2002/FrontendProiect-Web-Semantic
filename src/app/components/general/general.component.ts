@@ -23,12 +23,14 @@ export class GeneralComponent implements OnInit {
 
   constructor(private service: AppService, private http: HttpClient, private fb: FormBuilder) { }
 
+  movieModel = this.fb.group({
+    Name: [''],
+    Year: [''],
+  });
+
 
   ngOnInit(): void {
-    this.formRDF = this.fb.group({
-      name: [''],
-      year: [''],
-    });
+   
    }
 
   ShowScrapped() {
@@ -40,6 +42,20 @@ export class GeneralComponent implements OnInit {
           this.dataSource._updateChangeSubscription();
           this.scraped = true;
         }
+      }
+    })
+  }
+
+  UploadDataJson(){
+    var body = {
+      Name: this.movieModel.get('Name')?.value,
+      Year: this.movieModel.get('Year')?.value
+
+    };
+
+    this.service.UploadMovie(body).subscribe({
+      next: (response: any) => {
+        
       }
     })
   }

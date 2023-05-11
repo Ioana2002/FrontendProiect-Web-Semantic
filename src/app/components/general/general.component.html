@@ -22,21 +22,21 @@
     </table>
   </section>
   <section class="container"  style="margin-top: 20px; align-items:center; padding: 20px;">
-    <form [formGroup] = "formRDF">
+    <form [formGroup] = "movieModel">
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name" />
+        <input matInput formControlName="Name" />
       </mat-form-field>
     
       <mat-form-field appearance="outline">
         <mat-label>Year</mat-label>
-        <input matInput formControlName="year" />
+        <input matInput formControlName="Year" />
       </mat-form-field>
       <button mat-raised-button style="width: 150px;
             height: 50px;
             margin: auto;
             margin-bottom: 50px;
-            margin-top: 50px;" >Inserare date + reafisare</button>
+            margin-top: 50px;" (click)="UploadDataJson()">Inserare date + reafisare</button>
     </form>
   </section>
 
