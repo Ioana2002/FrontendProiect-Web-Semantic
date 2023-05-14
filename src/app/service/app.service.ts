@@ -22,5 +22,9 @@ export class AppService {
       formData
     );
   }
+
+  GetMoviesJson() {
+    return this.http.get<any>(this.baseUrl + '/Project/GetMovieJson');
+  }
 }
 

@@ -25,12 +25,12 @@
     <form [formGroup] = "movieModel">
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="Name" />
+        <input matInput formControlName="name" />
       </mat-form-field>
     
       <mat-form-field appearance="outline">
         <mat-label>Year</mat-label>
-        <input matInput formControlName="Year" />
+        <input matInput formControlName="year" />
       </mat-form-field>
       <button mat-raised-button style="width: 150px;
             height: 50px;
@@ -38,6 +38,19 @@
             margin-bottom: 50px;
             margin-top: 50px;" (click)="UploadDataJson()">Inserare date + reafisare</button>
     </form>
+    <table mat-table [dataSource]="dataSourceJson" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="year">
+        <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.Year}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumnsJson"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsJson;"></mat-row>
+    </table>
   </section>
 
 </body>

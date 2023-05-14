@@ -13,30 +13,35 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 export class GeneralComponent implements OnInit {
 
-  movies: any = []
+  
   dataSource = new MatTableDataSource();
+  dataSourceJson = new MatTableDataSource();
+  dataSourceTest = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'year'];
+  displayedColumnsJson: string[] = ['name', 'year'];
+
 
   scraped: boolean = false;
+  scrapedInserted: boolean = false;
+  
 
-  formRDF: FormGroup;
+  dataTest: any = [];
 
   constructor(private service: AppService, private http: HttpClient, private fb: FormBuilder) { }
 
   movieModel = this.fb.group({
-    Name: [''],
-    Year: [''],
+    name: [''],
+    year: [''],
   });
 
 
   ngOnInit(): void {
-   
-   }
+
+  }
 
   ShowScrapped() {
     this.service.GetScrappResult().subscribe({
       next: (response: any) => {
-        console.log(response)
         for (var i = 0; i < 3; i++) {
           this.dataSource.data.push(response[i]);
           this.dataSource._updateChangeSubscription();
@@ -46,18 +51,63 @@ export class GeneralComponent implements OnInit {
     })
   }
 
-  UploadDataJson(){
-    var body = {
-      Name: this.movieModel.get('Name')?.value,
-      Year: this.movieModel.get('Year')?.value
+  UploadDataJson() {
+    this.dataTest = [];
+    if (!this.scrapedInserted) {
+      this.service.GetScrappResult().subscribe({
+        next: (response: any) => {
+          for (var i = 0; i < 3; i++) {
+            this.dataTest.push(response[i])
+          }
+          this.scrapedInserted = true;
 
-    };
+          var newEntry = {
+            name: this.movieModel.get('name')?.value,
+            year: this.movieModel.get('year')?.value
+          };
+          this.dataTest.push(newEntry)
+          console.log(this.dataTest)
 
-    this.service.UploadMovie(body).subscribe({
-      next: (response: any) => {
-        
-      }
-    })
+          this.service.UploadMovie(this.dataTest).subscribe({
+            next: (response: any) => {
+              this.dataSourceJson.data = [];
+              this.service.GetMoviesJson().subscribe({
+                next: (response: any) => {
+                  console.log(response)
+                  response.forEach((movie: any) => {
+                    this.dataSourceJson.data.push(movie);
+                    this.dataSourceJson._updateChangeSubscription();
+                  })
+                }
+              });
+            }
+          });
+        }
+      })
+    }
+    else {
+      var newEntry = {
+        name: this.movieModel.get('name')?.value,
+        year: this.movieModel.get('year')?.value
+      };
+      this.dataTest.push(newEntry)
+      console.log(this.dataTest)
+
+      this.service.UploadMovie(this.dataTest).subscribe({
+        next: (response: any) => {
+          this.dataSourceJson.data = [];
+          this.service.GetMoviesJson().subscribe({
+            next: (response: any) => {
+              console.log(response)
+              response.forEach((movie: any) => {
+                this.dataSourceJson.data.push(movie);
+                this.dataSourceJson._updateChangeSubscription();
+              })
+            }
+          });
+        }
+      });
+    }
   }
 
 }
