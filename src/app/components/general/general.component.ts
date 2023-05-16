@@ -17,8 +17,10 @@ export class GeneralComponent implements OnInit {
   dataSource = new MatTableDataSource();
   dataSourceJson = new MatTableDataSource();
   dataSourceTest = new MatTableDataSource();
+  dataSourceRdf = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'year'];
   displayedColumnsJson: string[] = ['name', 'year'];
+  displayedColumnsRdf: string[] = ['name', 'year'];
 
 
   scraped: boolean = false;
@@ -26,6 +28,16 @@ export class GeneralComponent implements OnInit {
   
 
   dataTest: any = [];
+
+  dataRdf: {
+    subject: any,
+    predicate: 'aparutInAnul',
+    object: any
+  } = {
+    subject: '',
+    predicate: 'aparutInAnul',
+    object: ''
+  }
 
   constructor(private service: AppService, private http: HttpClient, private fb: FormBuilder) { }
 
@@ -108,6 +120,28 @@ export class GeneralComponent implements OnInit {
         }
       });
     }
+  }
+
+  InsertRdf(){
+    this.service.GetMoviesJson().subscribe({
+      next: ((response: any) => {
+        console.log(response);
+        response.forEach((movie: any) => {
+          this.dataRdf.subject = movie.Name;
+          this.dataRdf.object = movie.Year;
+
+          this.service.InsertRdfData(this.dataRdf).subscribe({
+            next: ((response: any) => {
+              this.dataSourceRdf.data = [];
+              this.dataSourceRdf.data.push(response);
+              this.dataSourceRdf._updateChangeSubscription();
+              
+            })
+          })
+        })
+      })
+    })
+    
   }
 
 }

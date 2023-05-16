@@ -26,5 +26,16 @@ export class AppService {
   GetMoviesJson() {
     return this.http.get<any>(this.baseUrl + '/Project/GetMovieJson');
   }
+
+  InsertRdfData(data: any){
+    return this.http.post(
+      this.baseUrl + '/Project/PostRdfServer',
+      data
+    );
+  }
+
+  GetRdfServer() {
+    return this.http.get<any>(this.baseUrl + '/Project/GetRdfServer');
+  }
 }
 
