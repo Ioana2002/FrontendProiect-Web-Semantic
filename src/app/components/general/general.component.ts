@@ -1,5 +1,5 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppService } from 'src/app/service/app.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -18,13 +18,16 @@ export class GeneralComponent implements OnInit {
   dataSourceJson = new MatTableDataSource();
   dataSourceTest = new MatTableDataSource();
   dataSourceRdf = new MatTableDataSource();
+  dataSourceJsonSters = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'year'];
   displayedColumnsJson: string[] = ['name', 'year'];
+  displayedColumnsJsonSters: string[] = ['name', 'year'];
   displayedColumnsRdf: string[] = ['name', 'year'];
 
 
   scraped: boolean = false;
   scrapedInserted: boolean = false;
+  
   
 
   dataTest: any = [];
@@ -46,6 +49,10 @@ export class GeneralComponent implements OnInit {
     year: [''],
   });
 
+  movieModelDelete = this.fb.group({
+    name: [''],
+  });
+
 
   ngOnInit(): void {
 
@@ -65,6 +72,7 @@ export class GeneralComponent implements OnInit {
 
   UploadDataJson() {
     this.dataTest = [];
+    this.dataSourceJson.data = [];
     if (!this.scrapedInserted) {
       this.service.GetScrappResult().subscribe({
         next: (response: any) => {
@@ -89,6 +97,7 @@ export class GeneralComponent implements OnInit {
                   response.forEach((movie: any) => {
                     this.dataSourceJson.data.push(movie);
                     this.dataSourceJson._updateChangeSubscription();
+                    
                   })
                 }
               });
@@ -114,6 +123,7 @@ export class GeneralComponent implements OnInit {
               response.forEach((movie: any) => {
                 this.dataSourceJson.data.push(movie);
                 this.dataSourceJson._updateChangeSubscription();
+               
               })
             }
           });
@@ -142,6 +152,30 @@ export class GeneralComponent implements OnInit {
       })
     })
     
+  }
+
+  DeleteDataJson(){
+    var name = this.movieModelDelete.get('name')?.value;
+
+    if (!name) {
+      return;
+    }
+    
+
+    this.service.DeleteMovie(name).subscribe({
+      next: ((response: any) => {
+        console.log("Am sters");
+        this.service.GetMoviesJson().subscribe({
+          next: (response: any) => {
+            this.dataSourceJsonSters.data = [];
+            response.forEach((movie: any) => {
+              this.dataSourceJsonSters.data.push(movie);
+              this.dataSourceJsonSters._updateChangeSubscription();
+            })
+          }
+        });
+      })
+    })
   }
 
 }
